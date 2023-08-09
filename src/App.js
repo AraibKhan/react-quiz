@@ -6,6 +6,7 @@ import Error from "./components/Error";
 import StartScreen from "./components/StartScreen";
 import Question from "./components/Question";
 import NextButton from "./components/NextButton";
+import Progress from "./components/Progress";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -48,6 +49,9 @@ const App = () => {
   );
 
   const numQuestions = questions.length;
+  const totalPoints = questions.reduce((acc, curr, i) => {
+    return acc + curr.points;
+  }, 0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,6 +78,13 @@ const App = () => {
         )}
         {status === "active" && (
           <>
+            <Progress
+              index={index}
+              numQuestions={numQuestions}
+              points={points}
+              totalPoints={totalPoints}
+              answer={answer}
+            />
             <Question
               question={questions[index]}
               dispatch={dispatch}
