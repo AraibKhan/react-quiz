@@ -14,6 +14,16 @@ const reducer = (state, action) => {
       return { ...state, status: "error" };
     case "startQuiz":
       return { ...state, status: "active" };
+    case "newAnswer":
+      const currQues = state.questions[state.index];
+      const currPoints =
+        action.payload === currQues.correctOption ? currQues.points : 0;
+
+      return {
+        ...state,
+        answer: action.payload,
+        points: state.points + currPoints,
+      };
     default:
       throw new Error("Invalid action!");
   }
@@ -24,10 +34,12 @@ const initialState = {
   //loading, error, ready, active, finished
   status: "loading",
   index: 0,
+  answer: null,
+  points: 0,
 };
 
 const App = () => {
-  const [{ questions, status, index }, dispatch] = useReducer(
+  const [{ questions, status, index, answer, points }, dispatch] = useReducer(
     reducer,
     initialState
   );
@@ -57,7 +69,14 @@ const App = () => {
         {status === "ready" && (
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
-        {status === "active" && <Question question={questions[index]} />}
+        {status === "active" && (
+          <Question
+            question={questions[index]}
+            dispatch={dispatch}
+            answer={answer}
+            points={points}
+          />
+        )}
       </Main>
     </div>
   );
