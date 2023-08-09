@@ -5,6 +5,7 @@ import Loader from "./components/Loader";
 import Error from "./components/Error";
 import StartScreen from "./components/StartScreen";
 import Question from "./components/Question";
+import NextButton from "./components/NextButton";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -24,6 +25,8 @@ const reducer = (state, action) => {
         answer: action.payload,
         points: state.points + currPoints,
       };
+    case "nextQuestion":
+      return { ...state, index: state.index + 1, answer: null };
     default:
       throw new Error("Invalid action!");
   }
@@ -70,12 +73,15 @@ const App = () => {
           <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
         )}
         {status === "active" && (
-          <Question
-            question={questions[index]}
-            dispatch={dispatch}
-            answer={answer}
-            points={points}
-          />
+          <>
+            <Question
+              question={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+              points={points}
+            />
+            <NextButton answer={answer} dispatch={dispatch} />
+          </>
         )}
       </Main>
     </div>
