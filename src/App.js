@@ -1,6 +1,10 @@
 import { useEffect, useReducer } from "react";
 import Header from "./components/Header";
 import Main from "./components/Main";
+import Loader from "./components/Loader";
+import Error from "./components/Error";
+import StartScreen from "./components/StartScreen";
+import Question from "./components/Question";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -8,6 +12,8 @@ const reducer = (state, action) => {
       return { ...state, questions: action.payload, status: "ready" };
     case "dataFailed":
       return { ...state, status: "error" };
+    case "startQuiz":
+      return { ...state, status: "active" };
     default:
       throw new Error("Invalid action!");
   }
@@ -17,10 +23,16 @@ const initialState = {
 
   //loading, error, ready, active, finished
   status: "loading",
+  index: 0,
 };
 
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [{ questions, status, index }, dispatch] = useReducer(
+    reducer,
+    initialState
+  );
+
+  const numQuestions = questions.length;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,7 +52,12 @@ const App = () => {
     <div className="app">
       <Header />
       <Main>
-        <p>Question?</p>
+        {status === "loading" && <Loader />}
+        {status === "error" && <Error />}
+        {status === "ready" && (
+          <StartScreen numQuestions={numQuestions} dispatch={dispatch} />
+        )}
+        {status === "active" && <Question question={questions[index]} />}
       </Main>
     </div>
   );
