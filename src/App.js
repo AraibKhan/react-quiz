@@ -1,4 +1,5 @@
 import { useEffect, useReducer } from "react";
+import data from "./data/questions.json";
 
 import Header from "./components/Header";
 import Main from "./components/Main";
@@ -89,18 +90,22 @@ const App = () => {
     return acc + curr.points;
   }, 0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/questions");
-        const data = await res.json();
-        dispatch({ type: "dataReceived", payload: data });
-      } catch (e) {
-        dispatch({ type: "dataFailed" });
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await fetch("http://localhost:8000/questions");
+  //       const data = await res.json();
+  //       dispatch({ type: "dataReceived", payload: data });
+  //     } catch (e) {
+  //       dispatch({ type: "dataFailed" });
+  //     }
+  //   };
 
-    fetchData();
+  //   fetchData();
+  // }, []);
+
+  useEffect(() => {
+    dispatch({ type: "dataReceived", payload: data.questions });
   }, []);
 
   return (
