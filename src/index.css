@@ -257,3 +257,24 @@ progress {
   font-size: inherit;
   padding: 0.8rem;
 }
+
+/* MEDIA QUERIES */
+@media (320px <= width <= 480px) {
+  html {
+    font-size: 40%;
+  }
+  .app {
+    width: 90vw;
+    margin-left: 1.5rem;
+  }
+  .app-header {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+/* @media (320px <= width <= 360) {
+  .app {
+    margin-left: 3rem;
+  }
+} */
